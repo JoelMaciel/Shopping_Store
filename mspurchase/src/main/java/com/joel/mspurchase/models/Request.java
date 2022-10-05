@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
@@ -16,12 +17,16 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@Entity
+@Table(name = "tb_request")
 public class Request {
 
-    private UUID requestId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long requestId;
     private String name;
     private Long product;
-    private BigDecimal value;
+    private BigDecimal valueProduct;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date purchaseDate;
     private String cpfClient;
