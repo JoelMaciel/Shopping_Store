@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/requests")
@@ -18,7 +20,7 @@ public class RequestController {
     private final RequestService requestService;
 
     @PostMapping
-    public ResponseEntity<Request> save(@RequestBody Request request) {
+    public ResponseEntity<Request> save(@RequestBody @Valid Request request) {
         requestService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(request);
     }
