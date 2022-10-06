@@ -26,7 +26,7 @@ public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long requestId;
+    private Long id;
 
     @NotBlank
     private String name;
