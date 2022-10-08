@@ -1,9 +1,8 @@
 package com.joel.mspurchase.controllers;
 
-import com.joel.mspurchase.models.Request;
+import com.joel.mspurchase.models.Order;
 import com.joel.mspurchase.services.RequestService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +19,7 @@ public class RequestController {
     private final RequestService requestService;
 
     @PostMapping
-    public ResponseEntity<Request> save(@RequestBody @Valid Request request) {
+    public ResponseEntity<Order> save(@RequestBody @Valid Order request) {
         requestService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(request);
     }
