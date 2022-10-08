@@ -1,4 +1,4 @@
-package com.joel.mspurchase.controllers.exception;
+package com.joel.mspurchase.services.exception;
 
 public abstract class EntityNotFoundException extends BusinessException{
     private static  final long serialVersionUID = 1L;
