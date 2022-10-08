@@ -1,7 +1,7 @@
 package com.joel.mspurchase.controllers;
 
 import com.joel.mspurchase.models.Order;
-import com.joel.mspurchase.services.RequestService;
+import com.joel.mspurchase.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +14,13 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/requests")
-public class RequestController {
-    private final RequestService requestService;
+@RequestMapping("/orders")
+public class OrderController {
+    private final OrderService requestService;
 
     @PostMapping
-    public ResponseEntity<Order> save(@RequestBody @Valid Order request) {
-        requestService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(request);
+    public ResponseEntity<Order> save(@RequestBody @Valid Order order) {
+        requestService.save(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 }
