@@ -1,4 +1,4 @@
-package com.joel.mspurchase.controllers.exception;
+package com.joel.mspurchase.services.exception;
 
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
