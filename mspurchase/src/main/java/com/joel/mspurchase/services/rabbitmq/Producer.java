@@ -1,6 +1,8 @@
 package com.joel.mspurchase.services.rabbitmq;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joel.mspurchase.models.Order;
+import lombok.SneakyThrows;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,12 @@ public class Producer {
     @Autowired
     private Queue queue;
 
+    @Autowired
+    private ObjectMapper mapper;
+
+    @SneakyThrows
     @PostMapping
     public void sendRequest(Order order) {
-        rabbitTemplate.convertAndSend(queue.getName(), order);
+        rabbitTemplate.convertAndSend(queue.getName(), mapper.writeValueAsString(order));
     }
 }
