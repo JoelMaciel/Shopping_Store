@@ -47,4 +47,7 @@ public class Order implements Serializable {
 
     @NotBlank
     private String cep;
+
+    @NotBlank
+    private String email;
 }
