@@ -30,4 +30,5 @@ public class Order implements Serializable {
     private Date purchaseDate;
     private String cpfClient;
     private String cep;
+    private String email;
 }

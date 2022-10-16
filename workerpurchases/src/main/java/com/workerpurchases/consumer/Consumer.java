@@ -28,7 +28,7 @@ public class Consumer {
         ObjectMapper mapper = new ObjectMapper();
         var order = mapper.readValue(message.getBody(), Order.class);
         log.info("Order received : {}", order);
-        emailService.notificationClient("jmviana37@gmail.com");
+        emailService.notificationClient(order.getEmail());
 
     }
 }
