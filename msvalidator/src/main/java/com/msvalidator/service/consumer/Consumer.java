@@ -1,7 +1,10 @@
-package com.msvalidator.service;
+package com.msvalidator.service.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.msvalidator.models.Order;
+import com.msvalidator.service.ValidatorService;
+import com.msvalidator.service.exception.InsufficientBalanceException;
+import com.msvalidator.service.exception.LimitUnavailableException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -28,8 +31,8 @@ public class Consumer {
 
         try {
             validatorService.validateOrder(order);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (LimitUnavailableException | InsufficientBalanceException exception) {
+            exception.printStackTrace();
         }
     }
 }
