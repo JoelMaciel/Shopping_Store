@@ -1,4 +1,4 @@
-package com.workerpurchases.consumer;
+package com.workerpurchases.service.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workerpurchases.models.Order;
@@ -28,7 +28,7 @@ public class Consumer {
         ObjectMapper mapper = new ObjectMapper();
         var order = mapper.readValue(message.getBody(), Order.class);
         log.info("Order received : {}", order);
-        emailService.notificationClient(order.getEmail());
+        emailService.notificationClient(order);
 
     }
 }
