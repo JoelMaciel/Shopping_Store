@@ -18,9 +18,39 @@ public class Consumer {
     @Autowired
     private ObjectMapper mapper;
 
+    @Autowired
+    private ValidatorService validatorService;
+
     @RabbitListener(queues = {"${queue.name}"})
     public void consumer(@Payload Message message) throws IOException {
         var order = mapper.readValue(message.getBody(), Order.class);
         log.info("Order received in Validator : {} ", order);
+
+        try {
+            validatorService.validateOrder(order);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
