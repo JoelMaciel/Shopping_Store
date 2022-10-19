@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MsvalidatorApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" />
+    <envs>
+      <env name="GMAIL_PASS" value="kvofzdlajgpffhwm" />
+      <env name="GMAIL_USER" value="$GMAIL_USER$" />
+    </envs>
+    <module name="msvalidator" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.msvalidator.MsvalidatorApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
