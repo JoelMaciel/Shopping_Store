@@ -3,6 +3,7 @@ package com.workerpurchases.service.producer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workerpurchases.models.Card;
 import com.workerpurchases.models.Order;
+import com.workerpurchases.service.CardService;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.core.Queue;
@@ -26,12 +27,15 @@ public class OrderProducer {
     @Autowired
     private ObjectMapper mapper;
 
+    @Autowired
+    private CardService cardService;
+
     @SneakyThrows
     @PostMapping
     public void sendOrder(Order order) {
         order.setCard(Card.builder()
-                .number("5148 5568 3056 8945")
-                .availableLimit(new BigDecimal(1000))
+                .number(cardService.generateCard())
+                .availableLimit(cardService.genetareLimit())
                 .build());
 
         rabbitTemplate.convertAndSend(queue.getName() , mapper.writeValueAsString(order));
