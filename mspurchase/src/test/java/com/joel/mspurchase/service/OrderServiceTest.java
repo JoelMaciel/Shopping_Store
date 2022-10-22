@@ -14,6 +14,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.swing.text.html.Option;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -58,6 +62,22 @@ public class OrderServiceTest {
         });
         assertEquals("The id request : " + id + " does not exists in the database", exception.getMessage());
 
+    }
+
+    @DisplayName("Should fail order successfully")
+    @Test
+    public void shouldFailOrderSuccessfully() {
+
+        var orderMock = mock.getOrderSaved();
+        var id = 1L;
+
+        Mockito.when(orderRepository.findById(id)).thenReturn(Optional.of(orderMock));
+
+        var orderSaved = orderService.findById(id);
+
+        assertEquals(orderMock.getId(), orderSaved.getId());
+        assertNotNull(orderSaved);
+        Mockito.verify(orderRepository, Mockito.atLeastOnce()).findById(id);
     }
 
 
