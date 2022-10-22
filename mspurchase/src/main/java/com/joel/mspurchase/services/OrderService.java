@@ -23,6 +23,11 @@ public class OrderService {
         return orderRepository.findById(id).orElseThrow(() -> new BusinessException(
                 "The id request : " + id + " does not exists in the database"));
     }
+
+    public void delete(Long id) {
+        var order = findById(id);
+        orderRepository.deleteById(order.getId());
+    }
 }
 
 
