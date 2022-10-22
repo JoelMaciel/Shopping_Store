@@ -4,6 +4,7 @@ import com.joel.mspurchase.models.Order;
 import com.joel.mspurchase.models.OrderMock;
 import com.joel.mspurchase.repositories.OrderRepository;
 import com.joel.mspurchase.services.OrderService;
+import com.joel.mspurchase.services.exception.BusinessException;
 import com.joel.mspurchase.services.rabbitmq.Producer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -43,6 +46,17 @@ public class OrderServiceTest {
 
         assertEquals(orderMok.getCep(), savedOrder.getCep());
         assertNotNull(savedOrder.getCep());
+
+    }
+    @DisplayName("Should fail to find non-existing order")
+    @Test
+    public void shouldFailToFindNonExistingOrder() {
+        var id = 1L;
+
+        Throwable exception = assertThrows(BusinessException.class, () -> {
+            orderService.findById(id);
+        });
+        assertEquals("The id request : " + id + " does not exists in the database", exception.getMessage());
 
     }
 
