@@ -80,6 +80,34 @@ public class OrderServiceTest {
         Mockito.verify(orderRepository, Mockito.atLeastOnce()).findById(id);
     }
 
+    @DisplayName("Should successfully delete an order")
+    @Test
+    public void shouldSuccessfullyDeleteOrder() {
+        var id = 1L;
+        var orderMock = mock.getOrderSaved();
+
+        Mockito.when(orderRepository.findById(id)).thenReturn(Optional.of(orderMock));
+        Mockito.doNothing().when(orderRepository).deleteById(id);
+
+        orderService.delete(id);
+        Mockito.verify(orderRepository, Mockito.atLeastOnce()).deleteById(id);
+
+    }
+
+    @DisplayName("Should fail to delete order that does not exist")
+    @Test
+    public void shouldFailWhenOrderIdDoesNotExist(){
+        var mockId = 1l;
+
+        Mockito.when(orderRepository.findById(mockId)).thenReturn(Optional.empty());
+
+        Throwable exception = assertThrows(BusinessException.class, () -> {
+            orderService.delete(mockId);
+        });
+        assertEquals("The id request : " + mockId + " does not exists in the database", exception.getMessage());
+
+    }
+
 
 
 }
