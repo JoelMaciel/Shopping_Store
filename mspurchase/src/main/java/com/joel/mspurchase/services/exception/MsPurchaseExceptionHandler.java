@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 
 
 @Slf4j
-@ControllerAdvice
+//@ControllerAdvice
 @RequiredArgsConstructor
 public class MsPurchaseExceptionHandler extends ResponseEntityExceptionHandler {
 

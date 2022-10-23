@@ -21,7 +21,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<Order> findById(@RequestBody Long id) {
+    public ResponseEntity<Order> findById(@PathVariable Long id) {
        var orderId =  orderService.findById(id);
         return  ResponseEntity.status(HttpStatus.OK).body(orderId);
     }
