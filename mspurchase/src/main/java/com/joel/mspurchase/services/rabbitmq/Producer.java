@@ -24,7 +24,7 @@ public class Producer {
 
     @SneakyThrows
     @PostMapping
-    public void sendRequest(Order order) {
+    public void sendOrder(Order order) {
         rabbitTemplate.convertAndSend(queue.getName(), mapper.writeValueAsString(order));
     }
 }
