@@ -14,13 +14,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.swing.text.html.Option;
-
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -44,7 +40,7 @@ public class OrderServiceTest {
         var orderMok = mock.getOrder();
 
         Mockito.when(orderRepository.save(Mockito.any(Order.class))).thenReturn(orderMok);
-        Mockito.doNothing().when(producer).sendRequest(Mockito.any(Order.class));
+        Mockito.doNothing().when(producer).sendOrder(Mockito.any(Order.class));
 
         var savedOrder = orderService.save(orderMok);
 

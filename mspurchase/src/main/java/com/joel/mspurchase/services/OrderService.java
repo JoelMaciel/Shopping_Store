@@ -15,7 +15,7 @@ public class OrderService {
 
     public Order save(Order order) {
         var savedOrder = orderRepository.save(order);
-        producer.sendRequest(savedOrder);
+      producer.sendOrder(savedOrder);
         return savedOrder;
     }
 
