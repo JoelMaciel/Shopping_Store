@@ -2,15 +2,19 @@ package com.joel.mspurchase.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joel.mspurchase.MspurchaseApplication;
+import com.joel.mspurchase.models.Order;
 import com.joel.mspurchase.models.OrderMock;
 import com.joel.mspurchase.services.OrderService;
 import com.joel.mspurchase.services.exception.EntityNotFoundException;
+import com.joel.mspurchase.services.rabbitmq.Producer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -43,6 +47,9 @@ public class OrderControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
+    @MockBean
+    private Producer producer;
+
     private static final String URL_ORDER = "/orders";
 
     @DisplayName("POST - Should register a new order in the database")
@@ -51,12 +58,9 @@ public class OrderControllerTest {
         var mockId = 1L;
         var orderBody = orderMock.getOrder();
 
-        mockMvc.perform(post(URL_ORDER)
-                        .content(mapper.writeValueAsString(orderBody))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isCreated());
+        Mockito.doNothing().when(producer).sendOrder(Mockito.any(Order.class));
+
+        mockMvc.perform(post(URL_ORDER).content(mapper.writeValueAsString(orderBody)).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isCreated());
 
         var orderSalved = orderService.findById(mockId);
 
@@ -68,9 +72,7 @@ public class OrderControllerTest {
     @Test
     public void shouldReturnOrderByIdSuccessfully() throws Exception {
         var mockId = 1L;
-        mockMvc.perform(get(URL_ORDER.concat("/" + mockId)))
-                .andDo(print())
-                .andExpect(status().isOk());
+        mockMvc.perform(get(URL_ORDER.concat("/" + mockId))).andDo(print()).andExpect(status().isOk());
 
     }
 
@@ -79,23 +81,20 @@ public class OrderControllerTest {
     public void shouldFailToFetchOrderThatDoesNorExist() throws Exception {
         var mockId = 1L;
 
-        mockMvc.perform(get(URL_ORDER.concat("/" + mockId)))
-                .andDo(print())
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get(URL_ORDER.concat("/" + mockId))).andDo(print()).andExpect(status().isNotFound());
     }
+
     @DisplayName("DELETE - Should successfully delete the order")
     @Test
     public void shouldSuccessfullyDeleteTheOrder() throws Exception {
         var mockId = 1L;
-        mockMvc.perform(delete(URL_ORDER.concat("/" + mockId)))
-                .andDo(print())
-                .andExpect(status().isNoContent());
+        mockMvc.perform(delete(URL_ORDER.concat("/" + mockId))).andDo(print()).andExpect(status().isNoContent());
 
         Throwable exception = assertThrows(EntityNotFoundException.class, () -> {
             orderService.delete(mockId);
         });
 
-        assertEquals("The id request : " + mockId + " does not exists in the database" , exception.getMessage());
+        assertEquals("The id request : " + mockId + " does not exists in the database", exception.getMessage());
 
     }
 }
