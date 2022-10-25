@@ -1,24 +1,25 @@
 package com.joel.mspurchase.services.rabbitmq;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joel.mspurchase.models.Order;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
+@RequiredArgsConstructor
 @Service
 public class Producer {
 
-    @Autowired
-    private  RabbitTemplate rabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
+    private final Queue queue;
+    private final ObjectMapper mapper;
 
-    @Autowired
-    private Queue queue;
-
+    @SneakyThrows
     @PostMapping
-    public void sendRequest(Order order) {
-        rabbitTemplate.convertAndSend(queue.getName(), order);
+    public void sendOrder(Order order) {
+        rabbitTemplate.convertAndSend(queue.getName(), mapper.writeValueAsString(order));
     }
 }
