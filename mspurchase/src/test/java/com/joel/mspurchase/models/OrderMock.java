@@ -8,25 +8,25 @@ public class OrderMock {
 
     public Order getOrder() {
         return Order.builder()
-                .name("Joel Maciel")
+                .name("Joel TEST INTEGRATION")
                 .product(1L)
                 .valueProduct(BigDecimal.TEN)
                 .purchaseDate(new Date())
-                .cpfClient("123.456.789-101")
-                .cep("61647895")
-                .email("joel@gmail.com")
+                .cpfClient("518.246.380-43")
+                .cep("61647795")
+                .email("jmviana37@gmail.com")
                 .build();
     }
     public Order getOrderSaved() {
         return Order.builder()
                 .id(1L)
-                .name("Joel Maciel")
+                .name("Joel TEST With Id")
                 .product(1L)
                 .valueProduct(BigDecimal.TEN)
                 .purchaseDate(new Date())
-                .cpfClient("123.456.789-101")
+                .cpfClient("111.540.140-88")
                 .cep("61647895")
-                .email("joel@gmail.com")
+                .email("jmviana37@gmail.com")
                 .build();
     }
 

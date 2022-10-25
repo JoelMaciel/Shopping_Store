@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,6 +58,16 @@ public class OrderControllerTest {
 
         assertEquals(orderSalved.getId(), mockId);
         assertNotNull(orderSalved);
+    }
+
+    @DisplayName("GET - Should successfully fetch orderId from database")
+    @Test
+    public void shouldReturnOrderByIdSuccessfully() throws Exception {
+        var mockId = 1L;
+        mockMvc.perform(get(URL_ORDER.concat("/" + mockId)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
     }
 }
 
