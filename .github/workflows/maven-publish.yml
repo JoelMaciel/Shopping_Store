@@ -42,7 +42,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('./mspurchase/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
       - name: Build package jar
-        run: mvn -B package -DskipeTests --file ./mspurchase/pom.xml
+        run: mvn -B package -DskipTests --file ./mspurchase/pom.xml
       - name: Upload .jar
         uses: actions/upload-artifact@v3
         with:
