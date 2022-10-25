@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joel.mspurchase.MspurchaseApplication;
 import com.joel.mspurchase.models.OrderMock;
 import com.joel.mspurchase.services.OrderService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,9 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = MspurchaseApplication.class)
@@ -36,7 +39,7 @@ public class OrderControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
-    private static final String url_order = "/orders";
+    private static final String URL_ORDER = "/orders";
 
     @DisplayName("POST - Should register a new order in the database")
     @Test
@@ -44,17 +47,27 @@ public class OrderControllerTest {
         var mockId = 1L;
         var orderBody = orderMock.getOrder();
 
-        mockMvc.perform(MockMvcRequestBuilders.post(url_order)
-                .content(mapper.writeValueAsString(orderBody))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+        mockMvc.perform(post(URL_ORDER)
+                        .content(mapper.writeValueAsString(orderBody))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated());
 
         var orderSalved = orderService.findById(mockId);
 
-        Assertions.assertEquals(orderSalved.getId(), mockId);
-        Assertions.assertNotNull(orderSalved);
+        assertEquals(orderSalved.getId(), mockId);
+        assertNotNull(orderSalved);
+    }
+
+    @DisplayName("GET - Should successfully fetch orderId from database")
+    @Test
+    public void shouldReturnOrderByIdSuccessfully() throws Exception {
+        var mockId = 1L;
+        mockMvc.perform(get(URL_ORDER.concat("/" + mockId)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
     }
 }
 
