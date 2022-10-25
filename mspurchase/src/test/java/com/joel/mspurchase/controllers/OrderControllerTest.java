@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joel.mspurchase.MspurchaseApplication;
 import com.joel.mspurchase.models.OrderMock;
 import com.joel.mspurchase.services.OrderService;
+import com.joel.mspurchase.services.exception.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -67,6 +71,31 @@ public class OrderControllerTest {
         mockMvc.perform(get(URL_ORDER.concat("/" + mockId)))
                 .andDo(print())
                 .andExpect(status().isOk());
+
+    }
+
+    @DisplayName("GET - Should fail to fetch order that does not exist")
+    @Test
+    public void shouldFailToFetchOrderThatDoesNorExist() throws Exception {
+        var mockId = 1L;
+
+        mockMvc.perform(get(URL_ORDER.concat("/" + mockId)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+    @DisplayName("DELETE - Should successfully delete the order")
+    @Test
+    public void shouldSuccessfullyDeleteTheOrder() throws Exception {
+        var mockId = 1L;
+        mockMvc.perform(delete(URL_ORDER.concat("/" + mockId)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        Throwable exception = assertThrows(EntityNotFoundException.class, () -> {
+            orderService.delete(mockId);
+        });
+
+        assertEquals("The id request : " + mockId + " does not exists in the database" , exception.getMessage());
 
     }
 }
