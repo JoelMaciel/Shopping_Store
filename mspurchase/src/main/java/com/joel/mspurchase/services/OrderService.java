@@ -3,6 +3,7 @@ package com.joel.mspurchase.services;
 import com.joel.mspurchase.models.Order;
 import com.joel.mspurchase.repositories.OrderRepository;
 import com.joel.mspurchase.services.exception.BusinessException;
+import com.joel.mspurchase.services.exception.EntityNotFoundException;
 import com.joel.mspurchase.services.rabbitmq.Producer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,9 @@ public class OrderService {
     }
 
     public Order findById(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new BusinessException(
-                "The id request : " + id + " does not exists in the database"));
+        return orderRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+                "The id request : " + id + " does not exists in the database") {
+        });
     }
 
     public void delete(Long id) {
